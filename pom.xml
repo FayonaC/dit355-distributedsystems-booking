@@ -37,7 +37,7 @@
                         <configuration>
                             <archive>
                                 <manifest>
-                                    <mainClass>Booking</mainClass> <!-- Change if main class name changes from Booking.java -->
+                                    <mainClass>Coordinator</mainClass> <!-- Change if main class name changes -->
                                 </manifest>
                             </archive>
                             <descriptorRefs>

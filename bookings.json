@@ -1,0 +1,18 @@
+{
+  "bookings": [
+    {
+      "userid": 12345,
+      "requestid": 13,
+      "dentistid": 1,
+      "issuance": 1602406766314,
+      "time": "2020-12-14 14:30"
+    },
+    {
+      "userid": 54321,
+      "requestid": 14,
+      "dentistid": 1,
+      "issuance": 1602406766315,
+      "time": "2020-12-14 14:30"
+    }
+  ]
+}
