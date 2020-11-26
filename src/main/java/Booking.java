@@ -1,3 +1,5 @@
+import java.math.BigInteger;
+
 public class Booking {
 
     private long userid;
@@ -56,12 +58,12 @@ public class Booking {
 
     @Override
     public String toString() {
-        return "{" +
-                "userid: " + userid +
-                ", requestid: " + requestid +
-                ", dentistid: " + dentistid +
-                ", issuance: " + issuance +
-                ", time: " + time + '\'' +
-                '}';
+        return "\n{\n" +
+                "\"userid\": " + userid +
+                ",\n\"requestid\": " + requestid +
+                ",\n\"dentistid\": " + dentistid +
+                ",\n\"issuance\": " + issuance +
+                ",\n\"time\": \"" + time + "\"" +
+                "\n}\n";
     }
 }

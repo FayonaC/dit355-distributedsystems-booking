@@ -17,7 +17,12 @@ public class BookingRegistry {
         Bookings = bookings;
     }
 
+    public void addBooking(Booking booking) {
+        Bookings.add(booking);
+    }
+
     public String toString() {
-        return "{bookings: " + Bookings.toString() + "}";
+        return "{\n" +
+                "\"bookings\" : " + Bookings.toString() + "\n}";
     }
 }
