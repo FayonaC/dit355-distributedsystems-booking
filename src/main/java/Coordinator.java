@@ -1,13 +1,21 @@
+import org.eclipse.paho.client.mqttv3.MqttException;
+
 public class Coordinator {
-    public static void main(String[] args) {
+
+    public static BookingRegistry bookingRegistry = new BookingRegistry();
+
+    public static void main(String[] args) throws MqttException {
+
         DataAccessLayer dal = new DataAccessLayer();
-        BookingRegistry bookingsJSON = dal.loadBookingRegistry();
-        System.out.println("read: " + bookingsJSON);
+        BookingRegistry bookingsJson = dal.loadBookingRegistry();
 
-        Booking newBooking = new Booking(4, 4, 2, 1602406766314L, "test");
-        bookingsJSON.addBooking(newBooking);
-        System.out.println("before write: " + bookingsJSON);
+        Subscriber s = new Subscriber();
+        s.subscribeToMessages();
 
-        dal.saveBookings(bookingsJSON);
+        System.out.print(bookingsJson);
+
+        Publisher p = new Publisher();
+        p.sendMessage(bookingsJson);
+        p.close();
     }
 }
