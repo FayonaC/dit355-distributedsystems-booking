@@ -6,6 +6,7 @@ public class Coordinator {
 
     public static void main(String[] args) throws MqttException {
 
+        DataAccessLayer dal = new DataAccessLayer();
         BookingRegistry bookingsJson = dal.loadBookingRegistry();
 
         Subscriber s = new Subscriber();

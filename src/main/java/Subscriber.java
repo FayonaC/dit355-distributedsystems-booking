@@ -81,9 +81,9 @@ public class Subscriber implements MqttCallback {
         Object jsonObject = jsonParser.parse(message.toString());
         JSONObject parser = (JSONObject) jsonObject;
 
-        long userid = Long.parseLong((String) parser.get("userId"));
-        long requestid = Long.parseLong((String) parser.get("requestId"));
-        long dentistid = Long.parseLong((String) parser.get("dentistId"));
+        long userid = Long.parseLong((String) parser.get("userid"));
+        long requestid = Long.parseLong((String) parser.get("requestid"));
+        long dentistid = Long.parseLong((String) parser.get("dentistid"));
         long issuance = Long.parseLong((String) parser.get("issuance"));
         String time = (String) parser.get("time");
 
