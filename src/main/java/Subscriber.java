@@ -57,23 +57,56 @@ public class Subscriber implements MqttCallback {
     public void deliveryComplete(IMqttDeliveryToken token) {
     }
 
+    /**
+     * When a message arrives from the above subscription, create a booking and save it
+     * @param topic
+     * @param message
+     * @throws Exception
+     */
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        System.out.println("topic '" + topic + "': " + message); // Just here for testing
+        System.out.println("topic '" + topic + "': " + message);
 
+        makeBooking(message);
+    }
+
+    /**
+     * Creates a booking from the message and saves it
+     * @param message
+     * @throws Exception
+     */
+    private void makeBooking(MqttMessage message) throws Exception {
         // Parsing message JSON
         JSONParser jsonParser = new JSONParser();
         Object jsonObject = jsonParser.parse(message.toString());
         JSONObject parser = (JSONObject) jsonObject;
 
+        long userid = Long.parseLong((String) parser.get("userId"));
+        long requestid = Long.parseLong((String) parser.get("requestId"));
+        long dentistid = Long.parseLong((String) parser.get("dentistId"));
+        long issuance = Long.parseLong((String) parser.get("issuance"));
+        String time = (String) parser.get("time");
+
         // Creating a booking object using the fields from the parsed JSON
-        Booking newBooking = new Booking((Long) parser.get("userid"), (Long) parser.get("requestid"),
-                (Long) parser.get("dentistid"), (Long) parser.get("issuance"), (String) parser.get("time"));
+        Booking newBooking = new Booking(userid, requestid, dentistid, issuance, time);
 
-        System.out.println("newBooking: " + newBooking); // Just here for testing
+        System.out.println("New booking object: " + newBooking);
 
+        // Saving the new booking in the booking registry
         DataAccessLayer dal = new DataAccessLayer();
         Coordinator.bookingRegistry.addBooking(newBooking);
         dal.saveBookings(Coordinator.bookingRegistry);
+
+        System.out.println("Booking has been saved in bookings.json!");
+
+        String responseJSON = "\n{\n" +
+                "\"userid\": " + userid +
+                ",\n\"requestid\": " + requestid +
+                ",\n\"time\": \"" + time + "\"" +
+                "\n}\n";
+
+        Publisher p = new Publisher();
+        p.sendBookingResponse(responseJSON);
+        p.close();
     }
 }

@@ -30,4 +30,19 @@ public class Publisher {
         message.setPayload(msg.getBytes()); /*move messageTest into payload*/
         middleware.publish(TOPIC, message);
     }
+
+    /**
+     * Sends a booking response following this format:
+     * https://raw.githubusercontent.com/feldob/dit355_2020/master/bookingresponse.json
+     * @param response
+     * @throws MqttPersistenceException
+     * @throws MqttException
+     */
+    void sendBookingResponse(String response) throws MqttPersistenceException, MqttException {
+        MqttMessage message = new MqttMessage();
+        String msg = response.toString();
+        message.setPayload(msg.getBytes()); /*move messageTest into payload*/
+        middleware.publish(TOPIC, message);
+        System.out.println(message.toString());
+    }
 }
