@@ -8,6 +8,8 @@ public class BookingRegistry {
     public BookingRegistry(ArrayList<Booking> bookings)  {
         Bookings = bookings;
     }
+    public BookingRegistry()  {
+    }
 
     public static ArrayList<Booking> getBookings() {
         return Bookings;
@@ -17,7 +19,13 @@ public class BookingRegistry {
         Bookings = bookings;
     }
 
-    public String toString() {
-        return "{bookings: " + Bookings.toString() + "}";
+    public void addBooking(Booking booking) {
+        Bookings.add(booking);
     }
+
+    public String toString() {
+        return "{\n" +
+                "\"bookings\" : " + Bookings.toString() + "\n}";
+    }
+
 }

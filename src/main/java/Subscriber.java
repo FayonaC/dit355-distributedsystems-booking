@@ -7,6 +7,9 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttSecurityException;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 public class Subscriber implements MqttCallback {
 
@@ -56,6 +59,21 @@ public class Subscriber implements MqttCallback {
 
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        System.out.println("topic '" + topic + "': " + message);
+        System.out.println("topic '" + topic + "': " + message); // Just here for testing
+
+        // Parsing message JSON
+        JSONParser jsonParser = new JSONParser();
+        Object jsonObject = jsonParser.parse(message.toString());
+        JSONObject parser = (JSONObject) jsonObject;
+
+        // Creating a booking object using the fields from the parsed JSON
+        Booking newBooking = new Booking((Long) parser.get("userid"), (Long) parser.get("requestid"),
+                (Long) parser.get("dentistid"), (Long) parser.get("issuance"), (String) parser.get("time"));
+
+        System.out.println("newBooking: " + newBooking); // Just here for testing
+
+        DataAccessLayer dal = new DataAccessLayer();
+        Coordinator.bookingRegistry.addBooking(newBooking);
+        dal.saveBookings(Coordinator.bookingRegistry);
     }
 }

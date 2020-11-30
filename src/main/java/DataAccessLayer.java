@@ -2,8 +2,11 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
 import org.json.simple.parser.*;
 
 public class DataAccessLayer {
@@ -61,6 +64,18 @@ public class DataAccessLayer {
         }
         BookingRegistry registry = new BookingRegistry(bookings);
         return registry;
+    }
+
+    public void saveBookings(BookingRegistry bookings) {
+        try (FileWriter file = new FileWriter(filepath)) {
+            JSONArray bookingsJSON = new JSONArray();
+            List<? extends Booking> collection = new ArrayList<>(bookings.getBookings());
+            bookingsJSON.addAll(collection);
+            file.write("{\n\"bookings\": " + bookingsJSON.toJSONString() + "\n}");
+            file.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
