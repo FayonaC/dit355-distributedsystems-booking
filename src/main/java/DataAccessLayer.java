@@ -57,7 +57,7 @@ public class DataAccessLayer {
             long userid = (Long) bookingObj.get("userid");
             long requestid = (Long) bookingObj.get("requestid");
             long dentistid = (Long) bookingObj.get("dentistid");
-            long issuance = (long) bookingObj.get("issuance");
+            long issuance = (Long) bookingObj.get("issuance");
             String time = (String) bookingObj.get("time");
 
             bookings.add(new Booking(userid, requestid, dentistid, issuance, time));
