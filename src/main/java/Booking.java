@@ -21,7 +21,13 @@ public class Booking {
     }
 
     public void setUserid(long userid) {
-        this.userid = userid;
+        String userValidation = String.valueOf(userid); // Coverts the long userid to a String to be used for validation
+        if (userValidation.matches("[0-9]{5}")) {
+            this.userid = userid;
+        }
+        else {
+            throw new IllegalArgumentException("User id has to  be five digits long");
+        }
     }
 
     public long getRequestid() {
@@ -29,7 +35,13 @@ public class Booking {
     }
 
     public void setRequestid(long requestid) {
-        this.requestid = requestid;
+        String requestValidation = String.valueOf(requestid); // Coverts the long requestid to a String to be used for validation
+        if (requestValidation.matches("[0-9]{2}")) {
+            this.requestid = requestid;
+        }
+        else {
+            throw new IllegalArgumentException("Request id has to be two digits long");
+        }
     }
 
     public long getDentistid() {
@@ -37,7 +49,13 @@ public class Booking {
     }
 
     public void setDentistid(long dentistid) {
-        this.dentistid = dentistid;
+        String dentistValidation = String.valueOf(dentistid); // Coverts the long dentistid to a String to be used for validation
+        if (dentistValidation.matches("[0-9]{2}")) {
+            this.dentistid = dentistid;
+        }
+        else {
+            throw new IllegalArgumentException("Request id has to be two digits long");
+        }
     }
 
     public long getIssuance() {
@@ -45,7 +63,13 @@ public class Booking {
     }
 
     public void setIssuance(long issuance) {
-        this.issuance = issuance;
+        String issuanceValidation = String.valueOf(issuance); // Coverts the long issuance to a String to be used for validation
+        if (issuanceValidation.matches("[0-9]{13}")) {
+            this.issuance = issuance;
+        }
+        else {
+            throw new IllegalArgumentException("Issuance has to be thirteen digits long");
+        }
     }
 
     public String getTime() {
@@ -53,6 +77,9 @@ public class Booking {
     }
 
     public void setTime(String time) {
+        if(time.matches("[0-9]{15}")) {
+            throw new IllegalArgumentException("Time should be in the format YYYY-MM-DD 00:00 (15 characters including spaces)");
+        }
         this.time = time;
     }
 
