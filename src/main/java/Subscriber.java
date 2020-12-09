@@ -46,12 +46,11 @@ public class Subscriber implements MqttCallback {
         System.out.println("Connection lost!");
         while (middleware.isConnected() == false) {
 
-
-            // reestablish connection lost? PLan b
+            // attempts to reestablish lost connection
             try {
+                Thread.sleep(3000);
+                System.out.println("Reconnecting..");
                 middleware.reconnect();
-
-                // middleware.setCallback(this);  // unclear what this method does (still works with or without).
             } catch (Exception e) {
                 throwable.getMessage();
             }
