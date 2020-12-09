@@ -1,5 +1,3 @@
-import java.math.BigInteger;
-
 public class Booking {
 
     private long userid;
@@ -8,6 +6,11 @@ public class Booking {
     private long issuance;
     private String time;
 
+    /**
+     * TODO: Change so constructor uses setters.
+     * Before: this.userid = userid;
+     * After: setUserid(userid);
+     */
     public Booking(long userid, long requestid, long dentistid, long issuance, String time) {
         this.userid = userid;
         this.requestid = requestid;
@@ -20,6 +23,10 @@ public class Booking {
         return userid;
     }
 
+    /**
+     * Doesn't allow user id's to be shorter than 5 digits and we have some that are just 1 digit.
+     * It would be enough to check userid < 100000 since that would make it 5 digits max. (same as in dentist)
+     */
     public void setUserid(long userid) {
         String userValidation = String.valueOf(userid); // Coverts the long userid to a String to be used for validation
         if (userValidation.matches("[0-9]{5}")) {
@@ -34,6 +41,9 @@ public class Booking {
         return requestid;
     }
 
+    /**
+     * Not sure if a user can make 99 requests maximum or if this should be higher than 2 digits.
+     */
     public void setRequestid(long requestid) {
         String requestValidation = String.valueOf(requestid); // Coverts the long requestid to a String to be used for validation
         if (requestValidation.matches("[0-9]{1,2}")) {
@@ -76,6 +86,11 @@ public class Booking {
         return time;
     }
 
+    /**
+     * Accepts "test" as a correct format.
+     * Perhaps try using LocalDateTime.parse(time, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) with no if statement
+     * but a try-catch around it. Try parsing & setting the time and if it fails then throw the illegalArgument...
+     */
     public void setTime(String time) {
         if(time.matches(".*[0-9][-][:]{16}")) {
             throw new IllegalArgumentException("Time has to be in the format YYYY-MM-DD 00:00 (16 characters long including spaces, dashes, and colons)");
