@@ -36,11 +36,11 @@ public class Booking {
 
     public void setRequestid(long requestid) {
         String requestValidation = String.valueOf(requestid); // Coverts the long requestid to a String to be used for validation
-        if (requestValidation.matches("[0-9]{2}")) {
+        if (requestValidation.matches("[0-9]{1,2}")) {
             this.requestid = requestid;
         }
         else {
-            throw new IllegalArgumentException("Request id has to be two digits long");
+            throw new IllegalArgumentException("Request id has to be between one and two digits long");
         }
     }
 
@@ -50,11 +50,11 @@ public class Booking {
 
     public void setDentistid(long dentistid) {
         String dentistValidation = String.valueOf(dentistid); // Coverts the long dentistid to a String to be used for validation
-        if (dentistValidation.matches("[0-9]{2}")) {
+        if (dentistValidation.matches("[0-9]{1,2}")) {
             this.dentistid = dentistid;
         }
         else {
-            throw new IllegalArgumentException("Request id has to be two digits long");
+            throw new IllegalArgumentException("Dentist id has to be between one and two digits long");
         }
     }
 
@@ -77,8 +77,8 @@ public class Booking {
     }
 
     public void setTime(String time) {
-        if(time.matches("[0-9]{15}")) {
-            throw new IllegalArgumentException("Time should be in the format YYYY-MM-DD 00:00 (15 characters including spaces)");
+        if(time.matches(".*[0-9][-][:]{16}")) {
+            throw new IllegalArgumentException("Time has to be in the format YYYY-MM-DD 00:00 (16 characters long including spaces, dashes, and colons)");
         }
         this.time = time;
     }
