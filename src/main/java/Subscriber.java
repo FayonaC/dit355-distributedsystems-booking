@@ -15,7 +15,7 @@ public class Subscriber implements MqttCallback {
 
     private final static ExecutorService THREAD_POOL = Executors.newSingleThreadExecutor();
 
-    private final static String TOPIC = "BookingRequest";
+    private final static String TOPIC = "SuccessfulBooking";
 
     private final static String BROKER = "tcp://localhost:1883";
 
@@ -75,13 +75,12 @@ public class Subscriber implements MqttCallback {
 
         makeBooking(message);
     }
-
-    /**
-     * Creates a booking from the message and saves it
-     * @param message
-     * @throws Exception
-     */
-    private void makeBooking(MqttMessage message) throws Exception {
+        /**
+         * Creates a booking from the message and saves it
+         * @param message
+         * @throws Exception
+         */
+        private void makeBooking(MqttMessage message) throws Exception {
         // Parsing message JSON
         JSONParser jsonParser = new JSONParser();
         Object jsonObject = jsonParser.parse(message.toString());

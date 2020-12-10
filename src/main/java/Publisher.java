@@ -6,7 +6,9 @@ import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 
 public class Publisher {
 
-    private final static String TOPIC = "BookingResponse";
+    private final static String TOPIC = "BookingRegistry";
+    private final static String TOPIC2 = "BookingResponse";
+
 
     private final static String BROKER = "tcp://localhost:1883";
 
@@ -24,10 +26,11 @@ public class Publisher {
         middleware.close();
     }
 
+    // This method sends the whole registry to components listening to "BookingRegistry" (Availability)
     void sendMessage(BookingRegistry messageTest) throws MqttPersistenceException, MqttException {
         MqttMessage message = new MqttMessage();
         String msg = messageTest.toString();
-        message.setPayload(msg.getBytes()); /*move messageTest into payload*/
+        message.setPayload(msg.getBytes());
         middleware.publish(TOPIC, message);
     }
 
@@ -38,11 +41,12 @@ public class Publisher {
      * @throws MqttPersistenceException
      * @throws MqttException
      */
+    // This method sends the successful booking response to components listening to "BookingResponse" (frontend)
     void sendBookingResponse(String response) throws MqttPersistenceException, MqttException {
         MqttMessage message = new MqttMessage();
         String msg = response.toString();
-        message.setPayload(msg.getBytes()); /*move messageTest into payload*/
-        middleware.publish(TOPIC, message);
+        message.setPayload(msg.getBytes());
+        middleware.publish(TOPIC2, message);
         System.out.println(message.toString());
     }
 }

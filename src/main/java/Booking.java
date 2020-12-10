@@ -15,6 +15,11 @@ public class Booking {
         this.issuance = issuance;
         this.time = time;
     }
+    public Booking(long userid, long requestid, String time) {
+        this.userid = userid;
+        this.requestid = requestid;
+        this.time = time;
+    }
 
     public long getUserid() {
         return userid;
