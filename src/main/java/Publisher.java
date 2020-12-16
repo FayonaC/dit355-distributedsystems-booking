@@ -29,6 +29,7 @@ public class Publisher {
     // This method sends the whole registry to components listening to "BookingRegistry" (Availability)
     void sendMessage(BookingRegistry messageTest) throws MqttPersistenceException, MqttException {
         MqttMessage message = new MqttMessage();
+        message.setRetained(true);
         String msg = messageTest.toString();
         message.setPayload(msg.getBytes());
         middleware.publish(TOPIC, message);
