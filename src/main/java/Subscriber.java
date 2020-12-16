@@ -111,6 +111,7 @@ public class Subscriber implements MqttCallback {
 
         Publisher p = new Publisher();
         p.sendBookingResponse(responseJSON);
+        p.sendMessage(Coordinator.bookingRegistry);
         p.close();
     }
 }
