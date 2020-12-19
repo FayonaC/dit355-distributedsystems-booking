@@ -25,8 +25,7 @@ public class Booking {
         String userValidation = String.valueOf(userid); // Coverts the long userid to a String to be used for validation
         if (userValidation.matches("[0-9]{1,5}")) { // This regex might have to change if we change the format for user id's
             this.userid = userid;
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("User id has to  be between one and five digits long");
         }
     }
@@ -39,8 +38,7 @@ public class Booking {
         String requestValidation = String.valueOf(requestid); // Coverts the long requestid to a String to be used for validation
         if (requestValidation.matches("[0-9]{1,5}")) { // This allows there to be up to 99999 requests
             this.requestid = requestid;
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Request id has to be between one and five digits long");
         }
     }
@@ -49,12 +47,14 @@ public class Booking {
         return dentistid;
     }
 
+    /**
+     * Dentistid inconsistent with setters in Dentist component (should accept 9999 dental offices)
+     */
     public void setDentistid(long dentistid) {
         String dentistValidation = String.valueOf(dentistid); // Coverts the long dentistid to a String to be used for validation
         if (dentistValidation.matches("[0-9]{1,2}")) {
             this.dentistid = dentistid;
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Dentist id has to be between one and two digits long");
         }
     }
@@ -67,8 +67,7 @@ public class Booking {
         String issuanceValidation = String.valueOf(issuance); // Coverts the long issuance to a String to be used for validation
         if (issuanceValidation.matches("[0-9]{13}")) {
             this.issuance = issuance;
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Issuance has to be thirteen digits long");
         }
     }
@@ -77,12 +76,14 @@ public class Booking {
         return time;
     }
 
+    /**
+     * Time: "2020-01-01 1:00" couldn't be parsed, not sure if this is an issue
+     */
     public void setTime(String time) {
         try {
             LocalDateTime.parse(time, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
             this.time = time;
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             System.out.println("Time has to be in the format YYYY-MM-DD 00:00 (16 characters long including spaces, dashes, and colons)");
         }
     }
