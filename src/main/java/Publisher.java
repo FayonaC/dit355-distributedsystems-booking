@@ -31,6 +31,7 @@ public class Publisher {
         MqttMessage message = new MqttMessage();
         message.setRetained(true);
         String msg = messageTest.toString();
+        message.setQos(1);
         message.setPayload(msg.getBytes());
         middleware.publish(TOPIC, message);
     }
@@ -46,6 +47,7 @@ public class Publisher {
     void sendBookingResponse(String response) throws MqttPersistenceException, MqttException {
         MqttMessage message = new MqttMessage();
         String msg = response.toString();
+        message.setQos(1);
         message.setPayload(msg.getBytes());
         middleware.publish(TOPIC2, message);
         System.out.println(message.toString());
