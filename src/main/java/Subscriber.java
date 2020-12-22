@@ -55,6 +55,11 @@ public class Subscriber implements MqttCallback {
                 throwable.getMessage();
             }
         }
+        try {
+            middleware.subscribe("SuccessfulBooking");
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
         System.out.println("Connection to broker reestablished!");
     }
 
