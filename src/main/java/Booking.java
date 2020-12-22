@@ -1,4 +1,5 @@
-import java.math.BigInteger;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Booking {
 
@@ -9,11 +10,11 @@ public class Booking {
     private String time;
 
     public Booking(long userid, long requestid, long dentistid, long issuance, String time) {
-        this.userid = userid;
-        this.requestid = requestid;
-        this.dentistid = dentistid;
-        this.issuance = issuance;
-        this.time = time;
+        setUserid(userid);
+        setRequestid(requestid);
+        setDentistid(dentistid);
+        setIssuance(issuance);
+        setTime(time);
     }
     public Booking(long userid, long requestid, String time) {
         this.userid = userid;
@@ -26,7 +27,12 @@ public class Booking {
     }
 
     public void setUserid(long userid) {
-        this.userid = userid;
+        String userValidation = String.valueOf(userid); // Converts the long userid to a String to be used for validation
+        if (userValidation.matches("[0-9]{1,6}")) {
+            this.userid = userid;
+        } else {
+            throw new IllegalArgumentException("User id has to  be between one and five digits long");
+        }
     }
 
     public long getRequestid() {
@@ -34,7 +40,12 @@ public class Booking {
     }
 
     public void setRequestid(long requestid) {
-        this.requestid = requestid;
+        String requestValidation = String.valueOf(requestid); // Converts the long requestid to a String to be used for validation
+        if (requestValidation.matches("[0-9]{1,5}")) { // This allows there to be up to 99999 requests
+            this.requestid = requestid;
+        } else {
+            throw new IllegalArgumentException("Request id has to be between one and five digits long");
+        }
     }
 
     public long getDentistid() {
@@ -42,7 +53,12 @@ public class Booking {
     }
 
     public void setDentistid(long dentistid) {
-        this.dentistid = dentistid;
+        String dentistValidation = String.valueOf(dentistid); // Converts the long dentistid to a String to be used for validation
+        if (dentistValidation.matches("[0-9]{1,4}")) {
+            this.dentistid = dentistid;
+        } else {
+            throw new IllegalArgumentException("Dentist id has to be between one and four digits long");
+        }
     }
 
     public long getIssuance() {
@@ -50,7 +66,12 @@ public class Booking {
     }
 
     public void setIssuance(long issuance) {
-        this.issuance = issuance;
+        String issuanceValidation = String.valueOf(issuance); // Converts the long issuance to a String to be used for validation, must add L after the issuance when testing for it to work
+        if (issuanceValidation.matches("[0-9]{13}")) {
+            this.issuance = issuance;
+        } else {
+            throw new IllegalArgumentException("Issuance has to be thirteen digits long");
+        }
     }
 
     public String getTime() {
@@ -58,7 +79,12 @@ public class Booking {
     }
 
     public void setTime(String time) {
-        this.time = time;
+        try {
+            LocalDateTime.parse(time, DateTimeFormatter.ofPattern("yyyy-MM-dd H:mm"));
+            this.time = time;
+        } catch (IllegalArgumentException e) {
+            System.out.println("Time has to be in the format YYYY-MM-DD 00:00 (16 characters long including spaces, dashes, and colons)");
+        }
     }
 
     @Override
