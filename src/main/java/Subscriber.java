@@ -32,7 +32,7 @@ public class Subscriber implements MqttCallback {
     void subscribeToMessages() {
         THREAD_POOL.submit(() -> {
             try {
-                middleware.subscribe(TOPIC);
+                middleware.subscribe(TOPIC,1);
             } catch (MqttSecurityException e) {
                 e.printStackTrace();
             } catch (MqttException e) {
