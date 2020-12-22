@@ -22,6 +22,7 @@ public class Publisher {
     }
 
     void close() throws MqttException {
+        middleware.unsubscribe(new String[]{"BookingRegistry", "BookingResponse"});
         middleware.disconnect();
         middleware.close();
     }
@@ -39,6 +40,7 @@ public class Publisher {
     /**
      * Sends a booking response following this format:
      * https://raw.githubusercontent.com/feldob/dit355_2020/master/bookingresponse.json
+     *
      * @param response
      * @throws MqttPersistenceException
      * @throws MqttException

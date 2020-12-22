@@ -1,5 +1,6 @@
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -32,7 +33,7 @@ public class Subscriber implements MqttCallback {
     void subscribeToMessages() {
         THREAD_POOL.submit(() -> {
             try {
-                middleware.subscribe(TOPIC,1);
+                middleware.subscribe(TOPIC, 1);
             } catch (MqttSecurityException e) {
                 e.printStackTrace();
             } catch (MqttException e) {
@@ -44,6 +45,7 @@ public class Subscriber implements MqttCallback {
     @Override
     public void connectionLost(Throwable throwable) {
         System.out.println("Connection lost!");
+
         while (middleware.isConnected() == false) {
 
             // attempts to reestablish lost connection
@@ -69,6 +71,7 @@ public class Subscriber implements MqttCallback {
 
     /**
      * When a message arrives from the above subscription, create a booking and save it
+     *
      * @param topic
      * @param message
      * @throws Exception
@@ -79,12 +82,14 @@ public class Subscriber implements MqttCallback {
 
         makeBooking(message);
     }
-        /**
-         * Creates a booking from the message and saves it
-         * @param message
-         * @throws Exception
-         */
-        private void makeBooking(MqttMessage message) throws Exception {
+
+    /**
+     * Creates a booking from the message and saves it
+     *
+     * @param message
+     * @throws Exception
+     */
+    private void makeBooking(MqttMessage message) throws Exception {
         // Parsing message JSON
         JSONParser jsonParser = new JSONParser();
         Object jsonObject = jsonParser.parse(message.toString());
