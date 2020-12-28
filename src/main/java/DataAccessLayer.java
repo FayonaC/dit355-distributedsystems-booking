@@ -60,11 +60,7 @@ public class DataAccessLayer {
             long issuance = (Long) bookingObj.get("issuance");
             String time = (String) bookingObj.get("time");
 
-            try {
-                bookings.add(new Booking(userid, requestid, dentistid, issuance, time));
-            } catch (IllegalArgumentException e) {
-                System.err.println("Error when creating new Booking: " + e.getMessage());
-            }
+            bookings.add(new Booking(userid, requestid, dentistid, issuance, time));
         }
         BookingRegistry registry = new BookingRegistry(bookings);
         return registry;

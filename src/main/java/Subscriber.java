@@ -89,7 +89,7 @@ public class Subscriber implements MqttCallback {
      * @param message
      * @throws Exception
      */
-    private void makeBooking(MqttMessage message) throws Exception {
+    public void makeBooking(MqttMessage message) throws Exception {
         // Parsing message JSON
         JSONParser jsonParser = new JSONParser();
         Object jsonObject = jsonParser.parse(message.toString());
@@ -101,27 +101,40 @@ public class Subscriber implements MqttCallback {
         long issuance = (Long) parser.get("issuance");
         String time = (String) parser.get("time");
 
-        // Creating a booking object using the fields from the parsed JSON
-        Booking newBooking = new Booking(userid, requestid, dentistid, issuance, time);
 
-        System.out.println("New booking object: " + newBooking);
+        try {
+            // Creating a booking object using the fields from the parsed JSON
+            Booking newBooking = new Booking(userid, requestid, dentistid, issuance, time);
 
-        // Saving the new booking in the booking registry
-        DataAccessLayer dal = new DataAccessLayer();
-        Coordinator.bookingRegistry.addBooking(newBooking);
-        dal.saveBookings(Coordinator.bookingRegistry);
+            System.out.println("New booking object: " + newBooking);
 
-        System.out.println("Booking has been saved in bookings.json!");
+            // Saving the new booking in the booking registry
+            DataAccessLayer dal = new DataAccessLayer();
+            Coordinator.bookingRegistry.addBooking(newBooking);
+            dal.saveBookings(Coordinator.bookingRegistry);
 
-        String responseJSON = "\n{\n" +
-                "\"userid\": " + userid +
-                ",\n\"requestid\": " + requestid +
-                ",\n\"time\": \"" + time + "\"" +
-                "\n}\n";
+            System.out.println("Booking has been saved in bookings.json!");
 
-        Publisher p = new Publisher();
-        p.sendBookingResponse(responseJSON);
-        p.sendMessage(Coordinator.bookingRegistry);
-        p.close();
+            String responseJSON = "\n{\n" +
+                    "\"userid\": " + userid +
+                    ",\n\"requestid\": " + requestid +
+                    ",\n\"time\": \"" + time + "\"" +
+                    "\n}\n";
+
+            Publisher p = new Publisher();
+            p.sendBookingResponse(responseJSON);
+            p.sendMessage(Coordinator.bookingRegistry);
+            p.close();
+        } catch (IllegalArgumentException e) {
+            System.err.println("Error when creating new Booking: " + e.getMessage());
+            String failedResponseJSON = "\n{\n" +
+                    "\"userid\": " + userid +
+                    ",\n\"requestid\": " + requestid +
+                    ",\n\"time\": \"none\"" +
+                    "\n}\n";
+
+            Publisher p = new Publisher();
+            p.sendBookingResponse(failedResponseJSON);
+        }
     }
 }
