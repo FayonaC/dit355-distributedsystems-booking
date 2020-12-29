@@ -53,14 +53,19 @@ public class DataAccessLayer {
 
         for (Object booking : arr) {
             JSONObject bookingObj = (JSONObject) booking;
+            try {
+                long userid = (Long) bookingObj.get("userid");
+                long requestid = (Long) bookingObj.get("requestid");
+                long dentistid = (Long) bookingObj.get("dentistid");
+                long issuance = (Long) bookingObj.get("issuance");
+                String time = (String) bookingObj.get("time");
 
-            long userid = (Long) bookingObj.get("userid");
-            long requestid = (Long) bookingObj.get("requestid");
-            long dentistid = (Long) bookingObj.get("dentistid");
-            long issuance = (Long) bookingObj.get("issuance");
-            String time = (String) bookingObj.get("time");
-
-            bookings.add(new Booking(userid, requestid, dentistid, issuance, time));
+                bookings.add(new Booking(userid, requestid, dentistid, issuance, time));
+            } catch (IllegalArgumentException e) {
+                System.err.println("Error when adding new Booking: " + e.getMessage());
+            } catch (ClassCastException e) {
+                System.err.println("Error when adding new Booking: " + e.getMessage());
+            }
         }
         BookingRegistry registry = new BookingRegistry(bookings);
         return registry;
