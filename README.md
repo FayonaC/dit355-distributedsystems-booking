@@ -10,4 +10,4 @@
 1. Clone repository to your machine
 2. Open a terminal window (e.g. Command Prompt) and move to the root folder of the repository. Enter command `mvn clean install` This will create a target folder.
 3. To ensure that installation was successful, check target folder for booking.jar file.
-4. Move to target folder and enter command `java -jar coordinator.jar`. This will enable the subscriber component to start listening to the MQTT Broker and the publisher component to send messages.
+4. Enter command `java -jar target/booking.jar`. This will enable the subscriber component to start listening to the MQTT Broker and the publisher component to send messages.
