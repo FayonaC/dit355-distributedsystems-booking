@@ -1,5 +1,6 @@
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class Booking {
 
@@ -31,7 +32,7 @@ public class Booking {
         if (userValidation.matches("[0-9]{1,6}")) {
             this.userid = userid;
         } else {
-            throw new IllegalArgumentException("User id has to  be between one and five digits long");
+            throw new IllegalArgumentException("User id has to  be between one and six digits long: " + userid);
         }
     }
 
@@ -44,7 +45,7 @@ public class Booking {
         if (requestValidation.matches("[0-9]{1,5}")) { // This allows there to be up to 99999 requests
             this.requestid = requestid;
         } else {
-            throw new IllegalArgumentException("Request id has to be between one and five digits long");
+            throw new IllegalArgumentException("Request id has to be between one and five digits long: " + requestid);
         }
     }
 
@@ -57,7 +58,7 @@ public class Booking {
         if (dentistValidation.matches("[0-9]{1,4}")) {
             this.dentistid = dentistid;
         } else {
-            throw new IllegalArgumentException("Dentist id has to be between one and four digits long");
+            throw new IllegalArgumentException("Dentist id has to be between one and four digits long: " + dentistid);
         }
     }
 
@@ -70,7 +71,7 @@ public class Booking {
         if (issuanceValidation.matches("[0-9]{13}")) {
             this.issuance = issuance;
         } else {
-            throw new IllegalArgumentException("Issuance has to be thirteen digits long");
+            throw new IllegalArgumentException("Issuance has to be thirteen digits long: " + issuance);
         }
     }
 
@@ -78,12 +79,20 @@ public class Booking {
         return time;
     }
 
-    public void setTime(String time) {
+    public boolean timeIsValid(String time) {
         try {
             LocalDateTime.parse(time, DateTimeFormatter.ofPattern("yyyy-MM-dd H:mm"));
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public void setTime(String time) {
+        if (timeIsValid(time)) {
             this.time = time;
-        } catch (IllegalArgumentException e) {
-            System.out.println("Time has to be in the format YYYY-MM-DD 00:00 (16 characters long including spaces, dashes, and colons)");
+        } else {
+            throw new IllegalArgumentException("Time has to be in the format YYYY-MM-DD H:mm (15-16 characters long including spaces, dashes, and colons): " + time);
         }
     }
 

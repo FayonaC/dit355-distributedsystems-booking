@@ -12,6 +12,8 @@ import org.eclipse.paho.client.mqttv3.MqttSecurityException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import sun.tools.tree.CastExpression;
 
 public class Subscriber implements MqttCallback {
 
@@ -109,39 +111,52 @@ public class Subscriber implements MqttCallback {
      * @param message
      * @throws Exception
      */
-    private void makeBooking(MqttMessage message) throws Exception {
+    public void makeBooking(MqttMessage message) throws ParseException, MqttException {
         // Parsing message JSON
         JSONParser jsonParser = new JSONParser();
         Object jsonObject = jsonParser.parse(message.toString());
         JSONObject parser = (JSONObject) jsonObject;
 
-        long userid = (Long) parser.get("userid");
-        long requestid = (Long) parser.get("requestid");
-        long dentistid = (Long) parser.get("dentistid"); // Long.parseLong((Long) parser.get("dentistid"));
-        long issuance = (Long) parser.get("issuance");
-        String time = (String) parser.get("time");
+        try {
+            long userid = (Long) parser.get("userid");
+            long requestid = (Long) parser.get("requestid");
+            long dentistid = (Long) parser.get("dentistid");
+            long issuance = (Long) parser.get("issuance");
+            String time = (String) parser.get("time");
 
-        // Creating a booking object using the fields from the parsed JSON
-        Booking newBooking = new Booking(userid, requestid, dentistid, issuance, time);
+            // Creating a booking object using the fields from the parsed JSON
+            Booking newBooking = new Booking(userid, requestid, dentistid, issuance, time);
 
-        System.out.println("New booking object: " + newBooking);
+            System.out.println("New booking object: " + newBooking);
 
-        // Saving the new booking in the booking registry
-        DataAccessLayer dal = new DataAccessLayer();
-        Coordinator.bookingRegistry.addBooking(newBooking);
-        dal.saveBookings(Coordinator.bookingRegistry);
+            // Saving the new booking in the booking registry
+            DataAccessLayer dal = new DataAccessLayer();
+            Coordinator.bookingRegistry.addBooking(newBooking);
+            dal.saveBookings(Coordinator.bookingRegistry);
 
-        System.out.println("Booking has been saved in bookings.json!");
+            System.out.println("Booking has been saved in bookings.json!");
 
-        String responseJSON = "\n{\n" +
-                "\"userid\": " + userid +
-                ",\n\"requestid\": " + requestid +
-                ",\n\"time\": \"" + time + "\"" +
-                "\n}\n";
+            String responseJSON = "\n{\n" +
+                    "\"userid\": " + userid +
+                    ",\n\"requestid\": " + requestid +
+                    ",\n\"time\": \"" + time + "\"" +
+                    "\n}\n";
 
-        Publisher p = new Publisher();
-        p.sendBookingResponse(responseJSON);
-        p.sendMessage(Coordinator.bookingRegistry);
-        p.close();
+            Publisher p = new Publisher();
+            p.sendBookingResponse(responseJSON);
+            p.sendMessage(Coordinator.bookingRegistry);
+            p.close();
+        } catch (Exception e) {
+            System.err.println("Error when creating new Booking: " + e.getMessage());
+
+            String failedResponseJSON = "\n{\n" +
+                    "\"userid\": " + parser.get("userid") +
+                    ",\n\"requestid\": " + parser.get("requestid") +
+                    ",\n\"time\": \"none\"" +
+                    "\n}\n";
+
+            Publisher p = new Publisher();
+            p.sendBookingResponse(failedResponseJSON);
+        }
     }
 }
